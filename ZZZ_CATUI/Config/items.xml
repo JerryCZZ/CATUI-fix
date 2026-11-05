@@ -1,0 +1,7 @@
+<configs>
+  <!-- Remove an existing override to avoid duplicate AltItemTypeIconColor properties. -->
+  <remove xpath="/items/item[property[@name='AltItemTypeIcon' and @value='book_read']]/property[@name='AltItemTypeIconColor']" />
+  <insertafter xpath="/items/item/property[@name='AltItemTypeIcon' and @value='book_read']">
+    <property name="AltItemTypeIconColor" value="0,255,0,255" />
+  </insertafter>
+</configs>
