@@ -1,4 +1,4 @@
-﻿<CATUI>
+<CATUI>
 	<append xpath="/templates">
 		<!-- <CATUI_diamonds_tile>
 			<sprite sprite="diamonds_tile" height="${Floor(parentinnerwidth/1.77)}" color="[black]" />
@@ -62,7 +62,7 @@
 
 		<!-- 物品制作 - 制作素材 -->
 		<CATUI_ingredient_row>
-			<rect name="row" width="${parentinnerwidth}" height="${parentinnerheight}" controller="IngredientEntry">
+			<rect name="row" pos="${pos}" width="111" height="146" controller="IngredientEntry">
 				<panel width="${parentinnerwidth-6}" height="${parentinnerheight-6}" style="hover" depth="2" tooltip_key="{itemname}" visible="{# itemname != ''}" clipping="SoftClip" clippingsoftness="8,8">
 					<sprite depth="1" name="background" sprite="menu_empty" width="${parentinnerwidth}" height="${parentinnerheight}" pos="-1,1" color="[black_threequarters_alpha]" type="sliced" globalopacity="false" />
 
