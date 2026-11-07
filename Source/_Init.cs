@@ -21,6 +21,7 @@ public class ModStartup : IModApi
 
         // 读取 ModSettings.xml 配置（在打补丁前应用，LocalLoad 开关从这里获取）
         CatuiSettings.Load();
+        CatuiToolbeltSettings.Apply();
 
         // 创建Harmony实例
         Harmony harmony = new Harmony(executeAssembly.GetName().Name);
@@ -35,6 +36,7 @@ public class ModStartup : IModApi
         {
             // 刷新 ModSettings.xml 配置（Gears 的存档在启动早期可能尚未生成，这里再读一次）
             CatuiSettings.Load();
+            CatuiToolbeltSettings.Apply();
 
             Constants.TrackedFriendColors = new Color[8]
             {
