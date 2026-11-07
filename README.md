@@ -1,4 +1,4 @@
-**For now, I've permanently disabled more than one hotbar until I figure out how to fix one problem.**
+Toolbelt now have 1 row (10 slots) by default. Pressing ALT+1, ALT+2, or ALT+3 will switch the hotbar pages. Currently, the maximum is only 3 pages (30 slots). If you want to change this, open the “ToolbeltSettings.xml” file and on line 13, change the value in “<PageCount value="3" />” to the number of pages you want. Later, I’ll try to add a custom settings via Mod Settings in the main menu, unless the mod author releases an update before me :D
 
 ZZZ_LocalXUiOverlay - This is compatibility patch between CATUI and [AGF HUD Plus](https://www.nexusmods.com/7daystodie/mods/870) for players in multiplayer (example: 1 **HOST** player use CATUI and 1 player use AGF)
 
