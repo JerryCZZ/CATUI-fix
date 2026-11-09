@@ -140,7 +140,7 @@
 	<remove xpath="/templates/item_stack" />
 	<append xpath="/templates">
 		<item_stack controller="ItemStack" on_scroll="false" allow_dropping="true" prefix_id="false" show_favorites="false" show_slotnum="false" allow_clicklock="true" transform_scale="1" cell_size="[itemStack:width]">
-			<rect name="itemStackContent" controller="${controller}" style="itemStack, hover" collider_scale="1.0" width="${cell_size}" height="${cell_size}" on_scroll="${on_scroll}" allow_dropping="${allow_dropping}" prefix_id="${prefix_id}" show_favorites="${show_favorites}" tooltip="{tooltip}" enabled="{# !defined('userlockmode') or !userlockmode}" visible="{# !defined('container_slots') or (int(${repeat_i}) &lt; int(container_slots)) }" show_slotnum="${show_slotnum}" allow_clicklock="${allow_clicklock}" mod_highlight="[04FE85]▇[-]" mod_default="[A6A6A6]▇[-]" transform_scale="${transform_scale}">
+			<rect name="itemStackContent" controller="${controller}" style="itemStack, hover" collider_scale="1.0" width="${cell_size}" height="${cell_size}" on_scroll="${on_scroll}" allow_dropping="${allow_dropping}" prefix_id="${prefix_id}" show_favorites="${show_favorites}" tooltip="{tooltip}" enabled="{# !defined('userlockmode') or !userlockmode}" visible="{# (!defined('container_slots') or (int(${repeat_i}) &lt; int(container_slots))) and matches_search }" show_slotnum="${show_slotnum}" allow_clicklock="${allow_clicklock}" mod_highlight="[04FE85]▇[-]" mod_default="[A6A6A6]▇[-]" transform_scale="${transform_scale}">
 				<!-- 边框 - 物品的边框，区分多种状态的多种颜色,各种状态参见：XUiC_ItemStack -->
 				<sprite depth="5" name="background" sprite="menu_empty3px" width="${4+cell_size}" height="${4+cell_size}" pos="-2,2" color="{selectionbordercolor}" type="sliced" globalopacity="true" fillcenter="false" />
 
