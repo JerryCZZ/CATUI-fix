@@ -23,7 +23,7 @@ public class XUiC_RecipeStackPatch
 
         bool isCrafting = (bool)_isCraftingField.GetValue(__instance);
 
-        // CATUI_timerFill: 单物品制作进度条
+
         XUiController timerFillCtrl = __instance.GetChildById("CATUI_timerFill");
         if (timerFillCtrl != null)
         {
@@ -50,7 +50,7 @@ public class XUiC_RecipeStackPatch
             }
         }
 
-        // CATUI_backgroundIcon: 队列进行中时隐藏，与lockIcon相反
+
         XUiController bgIconCtrl = __instance.GetChildById("CATUI_backgroundIcon");
         if (bgIconCtrl != null)
         {

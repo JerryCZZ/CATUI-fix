@@ -1,9 +1,9 @@
 using HarmonyLib;
 
-// Hand.BindToolbelt creates its per-slot data array (slotDatas) only once, sized by the toolbelt length at the
-// FIRST bind, and never grows it. If that first toolbelt was smaller than ToolbeltConfig.TotalSlots, selecting a slot
-// on page 2 (ALT+2) throws IndexOutOfRange in Hand.SelectSlot. This prefix grows the array to the current toolbelt
-// length before the original method runs.
+
+
+
+
 [HarmonyPatch(typeof(Hand), nameof(Hand.BindToolbelt))]
 public static class CatuiToolbeltHandPatch
 {

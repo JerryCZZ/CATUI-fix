@@ -20,11 +20,11 @@ public class XUiC_SkillBookLevelPatch
 		}
 		switch (_bindingName)
 		{
-			// 当前等级技能状态
+
 			case "CATUI_SkillStat":
-				// 未学习
+
 				_value = "notbuy";
-				// 已学习
+
 				if (flag2)
 				{
 					_value = "bought";

@@ -6,7 +6,7 @@ using Views;
 [HarmonyPatch]
 public class XUiViewPatch
 {
-    // ConditionalWeakTable 在视图对象被 GC 时自动移除条目，无需在 OnClose 线性扫描清理
+
     private class ScaleValue
     {
         public float value;
@@ -28,10 +28,10 @@ public class XUiViewPatch
             float scaleValue = 1f;
             float.TryParse(_value, out scaleValue);
 
-            // 缩放区间0.1-3
-            if (scaleValue < 0.1f) // 最小缩放为10%
+
+            if (scaleValue < 0.1f)
                 scaleValue = 0.1f;
-            if (scaleValue > 3f) // 最大缩放为300%
+            if (scaleValue > 3f)
                 scaleValue = 3f;
 
             ScaleValue holder;

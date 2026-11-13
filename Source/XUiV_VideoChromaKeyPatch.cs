@@ -77,7 +77,7 @@ public class XUiV_VideoChromaKeyPatch
         var uiTexture = video.uiTexture;
         var videoTexture = video.Texture;
 
-        // 第一步：继承 renderQueue（仅执行一次）
+
         if (!_inheritedRenderQueues.ContainsKey(video))
         {
             int targetRq = (int)UnityEngine.Rendering.RenderQueue.Transparent;
@@ -108,7 +108,7 @@ public class XUiV_VideoChromaKeyPatch
 
         int inheritedRq = _inheritedRenderQueues[video];
 
-        // 第二步：创建或更新 base material
+
         bool needNewMaterial = uiTexture.material == null || uiTexture.material.shader != _chromaKeyShader;
         
         if (needNewMaterial)
@@ -122,13 +122,13 @@ public class XUiV_VideoChromaKeyPatch
                     $"videoTextureNull={videoTexture == null}");
             }
 
-            // 销毁旧材质
+
             if (uiTexture.material != null && uiTexture.material != _chromaKeyShader)
             {
                 Object.Destroy(uiTexture.material);
             }
 
-            // 创建新材质
+
             var mat = new Material(_chromaKeyShader);
             mat.hideFlags = HideFlags.HideAndDontSave;
             mat.renderQueue = inheritedRq;
@@ -137,16 +137,16 @@ public class XUiV_VideoChromaKeyPatch
             mat.SetFloat("_Tolerance", tolerance);
             mat.SetFloat("_Smoothing", smoothing);
 
-            // 将视频纹理绑定到材质
+
             if (videoTexture != null)
             {
                 mat.mainTexture = videoTexture;
             }
 
-            // 设置材质到 UITexture (这会成为 drawCall.baseMaterial)
+
             uiTexture.material = mat;
 
-            // 同时设置 UITexture.mainTexture，确保 NGUI 的 MaterialPropertyBlock 传递视频纹理
+
             uiTexture.mainTexture = videoTexture;
 
             Debug.Log($"[CATUI] Base material SET for {video.id}: " +
@@ -155,12 +155,12 @@ public class XUiV_VideoChromaKeyPatch
         }
         else
         {
-            // 更新参数
+
             uiTexture.material.SetColor("_KeyColor", keyColor);
             uiTexture.material.SetFloat("_Tolerance", tolerance);
             uiTexture.material.SetFloat("_Smoothing", smoothing);
             
-            // 确保视频纹理被正确传递
+
             if (videoTexture != null && uiTexture.mainTexture != videoTexture)
             {
                 uiTexture.mainTexture = videoTexture;
@@ -171,10 +171,10 @@ public class XUiV_VideoChromaKeyPatch
             }
         }
 
-        // 第三步：关键修复 - 强制修复 drawCall 的 dynamicMaterial shader
-        // NGUI 的 CreateMaterial() 会通过 Shader.Find() 查找 shader，
-        // 并用找到的 shader 覆盖我们自定义材质的 shader
-        // 这里强制恢复我们的 ChromaKey shader
+
+
+
+
         if (uiTexture.drawCall != null && uiTexture.drawCall.dynamicMaterial != null)
         {
             var dc = uiTexture.drawCall;
@@ -189,14 +189,14 @@ public class XUiV_VideoChromaKeyPatch
                         $"newShader={_chromaKeyShader.name}");
                 }
 
-                // 强制设置 dynamicMaterial 的 shader 为我们的 ChromaKey shader
+
                 dynMat.shader = _chromaKeyShader;
                 dynMat.renderQueue = inheritedRq;
                 dynMat.SetColor("_KeyColor", keyColor);
                 dynMat.SetFloat("_Tolerance", tolerance);
                 dynMat.SetFloat("_Smoothing", smoothing);
                 
-                // 确保视频纹理也传递给 dynamicMaterial
+
                 if (videoTexture != null)
                 {
                     dynMat.mainTexture = videoTexture;
@@ -204,7 +204,7 @@ public class XUiV_VideoChromaKeyPatch
             }
         }
 
-        // 定期输出状态（仅用于调试）
+
         _frameCount++;
         if (_frameCount % 300 == 0 && _debugLogged.Contains(video))
         {
@@ -221,7 +221,7 @@ public class XUiV_VideoChromaKeyPatch
 
     private static void CleanupChromaKey(XUiV_Video video, bool keepState = false)
     {
-        // 清理材质（但保留配置状态以便下次打开时重新应用）
+
         if (video.uiTexture != null && video.uiTexture.material != null && video.uiTexture.material.shader == _chromaKeyShader)
         {
             Object.Destroy(video.uiTexture.material);
@@ -257,7 +257,7 @@ public class XUiV_VideoChromaKeyPatch
         return new Color(0f, 0f, 0f);
     }
 
-    // ============ Harmony Patches ============
+
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(XUiView), "ParseInitialAttributeValue")]
@@ -349,18 +349,18 @@ public class XUiV_VideoChromaKeyPatch
     [HarmonyPatch(typeof(XUiV_Video), "OnClose")]
     public static void OnClosePostfix(XUiV_Video __instance)
     {
-        // 不清理材质！保留材质以便下次打开时继续使用
-        // 材质会在 Cleanup（对象销毁）时才清理
+
+
     }
 
-    // 关键修复：拦截 UIDrawCall.UpdateMaterials()，在材质重建后恢复 ChromaKey shader
+
     [HarmonyPostfix]
     [HarmonyPatch(typeof(UIDrawCall), "UpdateMaterials")]
     public static void UpdateMaterialsPostfix(UIDrawCall __instance)
     {
         if (__instance == null || __instance.dynamicMaterial == null) return;
 
-        // 检查这个 drawCall 是否属于我们的 chromaKey 视频
+
         foreach (var video in _chromaEnabled)
         {
             if (video.uiTexture != null && video.uiTexture.drawCall == __instance)

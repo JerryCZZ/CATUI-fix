@@ -9,7 +9,7 @@ public class XUiC_CompanionEntryListPatch
 	[HarmonyPatch(typeof(XUiC_CompanionEntryList), "RefreshPartyList")]
 	public static bool Prefix(XUiC_CompanionEntryList __instance)
 	{
-		// 删掉原来改变view位置的逻辑
+
 		int i = 0;
 		EntityPlayer entityPlayer = __instance.xui.playerUI.entityPlayer;
 		if (entityPlayer.Companions != null)

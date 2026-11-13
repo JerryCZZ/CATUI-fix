@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xml>
-  <Name value="ZZZ_LocalXUiOverlay" />
-  <DisplayName value="Local XUi Overlay" />
-  <Description value="Experimental client-side local XUi loading for multiplayer." />
-  <Author value="Community compatibility patch" />
-  <Version value="0.1.0" />
-  <Website value="" />
-</xml>

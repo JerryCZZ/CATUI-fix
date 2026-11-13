@@ -5,8 +5,8 @@ using UnityEngine;
 [HarmonyPatch]
 public class XUiC_CollectedItemListPatch
 {
-	// 按名称给条目内的两个标签赋值:ItemName=名称,TextContent=数量。
-	// 标签不存在则跳过,不报错。
+
+
 	private static void SetLabels(GameObject item, string nameText, string countText)
 	{
 		if (item == null)
@@ -33,8 +33,8 @@ public class XUiC_CollectedItemListPatch
 		}
 	}
 
-	// 设置图标品质色:参照 XUiC_ItemStack 的 durabilitycolor 逻辑——
-	// 仅当物品有品质栏(ItemClass.ShowQualityBar)时用 QualityInfo.GetQualityColor(品质) 上色,否则透明
+
+
 	private static void SetDurabilityColor(GameObject item, ItemValue itemValue)
 	{
 		if (item == null)
@@ -61,16 +61,16 @@ public class XUiC_CollectedItemListPatch
 		}
 	}
 
-	// 获得/丢弃物品条目:ItemName=物品名,TextContent=只显示加减数量(去掉总数)。
-	// 注意:游戏原版把数字文本写入模板里"第一个"UILabel,模板新增 ItemName 后会写错标签,
-	// 故这里按名称重写两个标签。negative 区分获得(true 为丢弃条目,数字为负)。
+
+
+
 	private static void FillItemText(XUiC_CollectedItemList instance, ItemStack _is, bool negative)
 	{
 		if (_is == null || _is.itemValue == null)
 		{
 			return;
 		}
-		// 从末尾向前找本次实际被更新的条目:同 itemValue.type 且同正负(与游戏聚合逻辑一致)
+
 		for (int i = instance.items.Count - 1; i >= 0; i--)
 		{
 			var data = instance.items[i];
@@ -78,7 +78,7 @@ public class XUiC_CollectedItemListPatch
 			{
 				continue;
 			}
-			// 素材不足提示(count==0)也显示品质色,但跳过文字
+
 			SetDurabilityColor(data.Item, data.ItemStack.itemValue);
 			if (data.isMissingNotifier)
 			{
@@ -93,7 +93,7 @@ public class XUiC_CollectedItemListPatch
 		}
 	}
 
-	// 获得物品(AddItemStack)后重写标签
+
 	[HarmonyPostfix]
 	[HarmonyPatch(typeof(XUiC_CollectedItemList), "AddItemStack")]
 	public static void AddItemStackPostfix(XUiC_CollectedItemList __instance, ItemStack _is)
@@ -101,7 +101,7 @@ public class XUiC_CollectedItemListPatch
 		FillItemText(__instance, _is, _is != null && _is.count < 0);
 	}
 
-	// 丢弃物品(RemoveItemStack)后重写标签,丢弃条目标记为负(isNegative=true)
+
 	[HarmonyPostfix]
 	[HarmonyPatch(typeof(XUiC_CollectedItemList), "RemoveItemStack")]
 	public static void RemoveItemStackPostfix(XUiC_CollectedItemList __instance, ItemStack _is)
@@ -109,7 +109,7 @@ public class XUiC_CollectedItemListPatch
 		FillItemText(__instance, _is, true);
 	}
 
-	// 图标提示(如技能/统计图标):ItemName 置空,TextContent 显示累计数量,无品质色
+
 	[HarmonyPostfix]
 	[HarmonyPatch(typeof(XUiC_CollectedItemList), "AddIconNotification")]
 	public static void AddIconNotificationPostfix(XUiC_CollectedItemList __instance, string iconNotifier)
@@ -128,7 +128,7 @@ public class XUiC_CollectedItemListPatch
 		}
 	}
 
-	// 制作技能升级提示:ItemName 置空,TextContent 显示 "等级/最大等级",无品质色
+
 	[HarmonyPostfix]
 	[HarmonyPatch(typeof(XUiC_CollectedItemList), "AddCraftingSkillNotification")]
 	public static void AddCraftingSkillNotificationPostfix(XUiC_CollectedItemList __instance, ProgressionValue craftingSkill)

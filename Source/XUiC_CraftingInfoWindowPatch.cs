@@ -7,9 +7,9 @@ using UnityEngine;
 [HarmonyPatch]
 public class XUiC_CraftingInfoWindowPatch
 {
-    public const int TABTYPE_STAT = 3; // Stat TabType，索引为3（原变量无法赋值，用索引替代）
+    public const int TABTYPE_STAT = 3;
 
-    // 新增stat TAB切换状态
+
     [HarmonyPatch(typeof(XUiC_CraftingInfoWindow), "SetSelectedButtonByType")]
     [HarmonyPostfix]
     public static void SetSelectedButtonByType_Postfix(XUiC_CraftingInfoWindow __instance)
@@ -19,7 +19,7 @@ public class XUiC_CraftingInfoWindowPatch
         ((XUiV_Button)statButton.ViewComponent).Selected = currentTabType == TABTYPE_STAT;
     }
 
-    // 新增stat TAB按钮事件
+
     [HarmonyPatch(typeof(XUiC_CraftingInfoWindow), "Init")]
     [HarmonyPostfix]
     public static void Init_Postfix(XUiC_CraftingInfoWindow __instance)
@@ -41,7 +41,7 @@ public class XUiC_CraftingInfoWindowPatch
             return false;
         switch (bindingName)
         {
-            // 是否展示 stat TAB button
+
             case "showStatTab":
                 value = "false";
                 if (__instance.recipe != null)
@@ -58,7 +58,7 @@ public class XUiC_CraftingInfoWindowPatch
                 __result = true;
                 return false;
 
-            // 是否展示 stat TAB content
+
             case "showstats":
                 value = "false";
                 var tabType = typeof(XUiC_CraftingInfoWindow).GetField("TabType", BindingFlags.Public | BindingFlags.Instance).GetValue(__instance);
@@ -67,7 +67,7 @@ public class XUiC_CraftingInfoWindowPatch
                 return false;
 
             default:
-                // stat属性词条stattitle
+
                 if (bindingName.StartsWith("itemstattitle"))
                 {
 					return GetStat(bindingName, "itemstattitle", ref value, ref __result, __instance, (entry, displayInfo) => {
@@ -76,7 +76,7 @@ public class XUiC_CraftingInfoWindowPatch
 						return UIDisplayInfoManager.Current.GetLocalizedName(displayInfo.StatType);
 					});
                 }
-                // stat属性词条statvalue
+
                 if (bindingName.StartsWith("itemstat"))
                 {
                     return GetStat(bindingName, "itemstat", ref value, ref __result, __instance, (entry, displayInfo) => {
@@ -86,7 +86,7 @@ public class XUiC_CraftingInfoWindowPatch
                 return true;
         }
     }
-    // GetStat通用逻辑
+
     private static bool GetStat(string bindingName, string prefix, ref string value, ref bool __result,
         XUiC_CraftingInfoWindow instance, Func<ItemValue, DisplayInfoEntry, string> valueGenerator)
     {
@@ -99,7 +99,7 @@ public class XUiC_CraftingInfoWindowPatch
                 return false;
             }
 
-            // 解析index
+
             int index;
             if (bindingName.Length <= prefix.Length || !int.TryParse(bindingName.Substring(prefix.Length), out index))
             {
@@ -108,7 +108,7 @@ public class XUiC_CraftingInfoWindowPatch
                 return false;
             }
 
-            // 获取物品信息
+
             int itemTier = instance.selectedCraftingTier;
             int itemId = instance.recipe.itemValueType;
             ItemValue itemValue = new ItemValue(itemId, itemTier, itemTier);
@@ -120,7 +120,7 @@ public class XUiC_CraftingInfoWindowPatch
                 return false;
             }
 
-            // 获取物品属性
+
             ItemDisplayEntry itemDisplayEntry = UIDisplayInfoManager.Current.GetDisplayStatsForTag(
                 itemValue.ItemClass.IsBlock() ? Block.list[itemValue.type].DisplayType : itemValue.ItemClass.DisplayType);
             if (itemDisplayEntry == null || itemDisplayEntry.DisplayStats == null ||
@@ -131,7 +131,7 @@ public class XUiC_CraftingInfoWindowPatch
                 return false;
             }
 
-            // 属性赋值
+
             DisplayInfoEntry displayInfoEntry = itemDisplayEntry.DisplayStats[index];
             value = valueGenerator(itemValue, displayInfoEntry);
             __result = true;
@@ -139,7 +139,7 @@ public class XUiC_CraftingInfoWindowPatch
         }
         catch (Exception ex)
         {
-            // 异常
+
 			Debug.LogError($"[CATUI] XUiC_CraftingInfoWindowPatch: Error GetStat '{bindingName}': {ex.Message}\n{ex.StackTrace}");
             value = string.Empty;
             __result = true;

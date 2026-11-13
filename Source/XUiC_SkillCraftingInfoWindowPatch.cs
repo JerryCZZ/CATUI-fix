@@ -4,7 +4,7 @@ using System.Collections.Generic;
 [HarmonyPatch]
 public class XUiC_SkillCraftingInfoWindowPatch
 {
-	// 递归设置所有子组件的滚动事件（参考XUiV_ScrollView.applyScrollEventToChildren）
+
 	private static void ApplyScrollEventToChildren(XUiController _controller)
 	{
 		if (_controller == null || _controller.ViewComponent == null)
@@ -17,14 +17,14 @@ public class XUiC_SkillCraftingInfoWindowPatch
 		}
 	}
 
-	// 在Init方法中为levelEntry添加OnScroll事件绑定（参考XUiC_SkillPerkInfoWindow的实现）
+
 	[HarmonyPostfix]
 	[HarmonyPatch(typeof(XUiC_SkillCraftingInfoWindow), "Init")]
 	public static void Init_Postfix(XUiC_SkillCraftingInfoWindow __instance)
 	{
 		foreach (XUiC_SkillCraftingInfoEntry levelEntry in __instance.levelEntries)
 		{
-			// 递归设置所有子组件的滚动事件，确保鼠标悬停在任何子元素上都能触发滚动
+
 			ApplyScrollEventToChildren(levelEntry);
 			levelEntry.OnScroll += (XUiController _sender, float _delta) =>
 			{
@@ -40,7 +40,7 @@ public class XUiC_SkillCraftingInfoWindowPatch
 		}
 	}
 
-	// 重构DisplayDataList：将每个DisplayData的UnlockDataList展开为独立的DisplayData
+
 	private static List<ProgressionClass.DisplayData> RebuildDisplayDataList(ProgressionClass progressionClass)
 	{
 		List<ProgressionClass.DisplayData> newDisplayDataList = new List<ProgressionClass.DisplayData>();
@@ -104,7 +104,7 @@ public class XUiC_SkillCraftingInfoWindowPatch
 		}
 	}
 
-	// 分页修复：基于实际的DisplayDataList数量计算页数
+
 	[HarmonyPrefix]
 	[HarmonyPatch(typeof(XUiC_SkillCraftingInfoWindow), "SkillChanged")]
 	public static bool SkillChangedPrefix(XUiC_SkillCraftingInfoWindow __instance)
@@ -126,7 +126,7 @@ public class XUiC_SkillCraftingInfoWindowPatch
 			return false;
 		}
 
-		// 使用辅助方法重构DisplayDataList并获取实际数量
+
 		ProgressionClass progressionClass = __instance.CurrentSkill.ProgressionClass;
 		List<ProgressionClass.DisplayData> newDisplayDataList = RebuildDisplayDataList(progressionClass);
 		int elementCount = newDisplayDataList.Count;
@@ -144,7 +144,7 @@ public class XUiC_SkillCraftingInfoWindowPatch
 	[HarmonyPatch(typeof(XUiC_SkillCraftingInfoWindow), "UpdateSkill")]
 	public static bool UpdateSkill_Prefix(XUiC_SkillCraftingInfoWindow __instance)
 	{
-		// Patch变量名重新赋值
+
 		ProgressionValue CurrentSkill = __instance.CurrentSkill;
 		XUiC_ItemActionList actionItemList = __instance.actionItemList;
 		int skillsPerPage = __instance.skillsPerPage;
@@ -162,12 +162,12 @@ public class XUiC_SkillCraftingInfoWindowPatch
 		{
 			XUiC_SkillEntry entryForSkill = windowGroup.Controller.GetChildByType<XUiC_SkillList>().GetEntryForSkill(CurrentSkill);
 			{
-				// 使用辅助方法重构DisplayDataList
+
 				List<ProgressionClass.DisplayData> newDisplayDataList = RebuildDisplayDataList(progressionClass);
 
 				foreach (XUiC_SkillCraftingInfoEntry levelEntry in levelEntries)
 				{
-					// 应用新DisplayDataList
+
 					ProgressionClass.DisplayData data = (newDisplayDataList.Count > num) ? newDisplayDataList[num] : null;
 					levelEntry.Data = data;
 					levelEntry.IsDirty = true;
@@ -213,13 +213,13 @@ public class XUiC_SkillCraftingInfoWindowPatch
                 break;
             }
         }
-		// 设置制作物品（配方）列表
+
         if (xUiC_RecipeList == null)
         {
             XUiC_WindowSelector.OpenSelectorAndWindow(xUi.playerUI.entityPlayer, "crafting");
             xUiC_RecipeList = xUi.GetChildByType<XUiC_RecipeList>();
         }
-		// 展示第一个解锁物品的配方
+
 		xUiC_RecipeList?.SetRecipeDataByItem(xUiC_SkillCraftingInfoEntry.Data.GetUnlockItem(0).Id);
 		return false;
 	}

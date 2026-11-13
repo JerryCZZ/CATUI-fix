@@ -5,10 +5,10 @@ using UnityEngine;
 [HarmonyPatch]
 public class XUiC_SkillAttributeInfoWindowPatch
 {
-	// 各窗口当前展示的技能名，用于区分"购买刷新"与"切换技能"
+
 	private static readonly Dictionary<XUiC_SkillAttributeInfoWindow, string> LastSkill = new Dictionary<XUiC_SkillAttributeInfoWindow, string>();
 
-	// 购买属性点后保留当前页，切换技能时回到第一页
+
 	[HarmonyPrefix]
 	[HarmonyPatch(typeof(XUiC_SkillAttributeInfoWindow), "SkillChanged")]
 	public static bool SkillChangedPrefix(XUiC_SkillAttributeInfoWindow __instance)
@@ -40,13 +40,13 @@ public class XUiC_SkillAttributeInfoWindowPatch
 
 		if (sameSkill)
 		{
-			// 同技能刷新（如购买属性点触发的整窗刷新）：保留当前页，仅越界时收尾
+
 			int currentPage = pager.GetPage();
 			pager.SetPage(Mathf.Min(currentPage, pager.GetLastPage()));
 		}
 		else
 		{
-			// 切换技能：回到第一页
+
 			pager.Reset();
 		}
 		__instance.IsDirty = true;

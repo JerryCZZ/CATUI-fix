@@ -27,7 +27,7 @@ public static class PartyAvatar
 			{
 				return 0UL;
 			}
-			// 优先使用原生平台标识(Steam)，跨平台(EOS)玩家拿不到 SteamId 时返回 0
+
 			if (persistentPlayerData.NativeId is UserIdentifierSteam nativeSteam)
 			{
 				return nativeSteam.SteamId;
@@ -69,7 +69,7 @@ public static class PartyAvatar
 			}
 			return;
 		}
-		// 头像尚未加载完成，等待 AvatarImageLoaded_t 回调
+
 		RegisterCallback();
 		if (!pending.TryGetValue(steamId, out List<Action<Texture2D>> list))
 		{
@@ -149,7 +149,7 @@ public static class PartyAvatar
 			{
 				return null;
 			}
-			// Steam 图像自上而下存储，Unity 纹理自下而上，垂直翻转避免头像倒立
+
 			int stride = (int)width * 4;
 			byte[] flipped = new byte[rgba.Length];
 			for (uint y = 0; y < height; y++)

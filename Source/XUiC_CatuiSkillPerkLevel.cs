@@ -28,12 +28,12 @@ class XUiC_CATUI_Hover : XUiController
 		}
 	}
 
-	// Hover 换Sprite name=background 的背景颜色
+
 	public override void OnHovered(bool _isOver)
     {
 		base.OnHovered(_isOver);
 
-		// 背景变色
+
 		if (CATUI_EL_hover_bg != null)
 		{
 			if (_isOver)

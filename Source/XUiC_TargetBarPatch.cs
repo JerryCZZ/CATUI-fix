@@ -6,18 +6,38 @@ using TargetBuffs;
 [HarmonyPatch]
 public class XUiC_TargetBarPatch
 {
-	// 非 buff 类绑定（直接由本补丁处理，不走控制器）
+
 	private static readonly HashSet<string> NonBuffBindings = new HashSet<string>
 	{
 		"CATUI_fillCurrent",
 		"CATUI_EntityType",
 		"CATUI_EntityTags",
+        "CATUI_EntityBuffsEnabled",
+        "CATUI_EntityBackgroundColor",
+        "CATUI_ShowNormalBackground",
 	};
 
-	/// <summary>
-	/// 目标切换后同步到控制器。挂在 XUiC_TargetBar.Update 上，
-	/// 在每次目标变化/刷新后重算全部 buff 状态。
-	/// </summary>
+	    private static string GetEntityKind(EntityAlive target)
+    {
+        EntityClass entityClass = EntityClass.list[target.entityClass];
+        bool boss = entityClass.Tags.Test_Bit(FastTags<TagGroup.Global>.GetBit("boss"));
+        bool feral = entityClass.Tags.Test_Bit(FastTags<TagGroup.Global>.GetBit("feral"));
+        bool radiated = entityClass.Tags.Test_Bit(FastTags<TagGroup.Global>.GetBit("radiated"));
+        bool charged = entityClass.Tags.Test_Bit(FastTags<TagGroup.Global>.GetBit("charged"));
+        bool infernal = entityClass.Tags.Test_Bit(FastTags<TagGroup.Global>.GetBit("infernal"));
+        string name = entityClass.entityClassName;
+        if (radiated) return "radiated";
+        if (charged) return "charged";
+        if (infernal) return "infernal";
+        if (feral) return "feral";
+        if (boss || name == "animalBear" || name == "animalZombieBear" || name == "animalDireWolf") return "boss";
+        return "normal";
+    }
+
+
+
+
+
 	[HarmonyPostfix]
 	[HarmonyPatch(typeof(XUiC_TargetBar), "Update")]
 	public static void UpdatePostfix(XUiC_TargetBar __instance)
@@ -36,13 +56,33 @@ public class XUiC_TargetBarPatch
 	{
 		EntityAlive Target = __instance.Target;
 
-		// 非 buff 绑定：本补丁自行处理
+
 		if (NonBuffBindings.Contains(bindingName))
 		{
 			switch (bindingName)
 			{
-				// 丧尸血量百分比（0-1），瞬时值，与 fill 绑定最终显示值一致（*1.01）
-				case "CATUI_fillCurrent":
+
+				case "CATUI_ShowNormalBackground":
+                    value = CatuiHealthBarSettings.ShowNormalBackground ? "true" : "false";
+                    __result = true;
+                    return false;
+
+                case "CATUI_EntityBackgroundColor":
+                    value = "48,52,59,200";
+                    if (Target != null)
+                    {
+                        string kind = GetEntityKind(Target);
+                        value = CatuiHealthBarSettings.BackgroundColor(CatuiHealthBarSettings.VisibleEntityType(kind));
+                    }
+                    __result = true;
+                    return false;
+
+                case "CATUI_EntityBuffsEnabled":
+                    value = CatuiHealthBarSettings.BuffsAndDebuffs ? "true" : "false";
+                    __result = true;
+                    return false;
+
+                case "CATUI_fillCurrent":
 					value = "0";
 					if (Target != null && Target.IsAlive())
 					{
@@ -52,7 +92,7 @@ public class XUiC_TargetBarPatch
 					__result = true;
 					return false;
 
-				// 获取丧尸类型
+
 				case "CATUI_EntityType":
 					value = "normal";
 					if (Target != null)
@@ -66,35 +106,36 @@ public class XUiC_TargetBarPatch
 						bool IsBear = entityClass.entityClassName == "animalBear";
 						bool IsZombieBear = entityClass.entityClassName == "animalZombieBear";
 						bool IsDireWolf = entityClass.entityClassName == "animalDireWolf";
-						// 辐射
+
 						if (IsRadiated) {
 							value = "radiated";
 						}
-						// 带电
+
 						else if(IsCharged)
 						{
 							value = "charged";
 						}
-						// 炼狱
+
 						else if(IsInfernal)
 						{
 							value = "infernal";
 						}
-						// 凶残
+
 						else if (IsFeral)
 						{
 							value = "feral";
 						}
-						// BOSS 猪王，大熊，丧尸熊，恐狼
+
 						else if (IsBoss || IsBear || IsZombieBear || IsDireWolf)
 						{
 							value = "boss";
 						}
 					}
-					__result = true;
+					value = CatuiHealthBarSettings.VisibleEntityType(value);
+                    __result = true;
 					return false;
 
-				// 获取丧尸类型（原始标签串）
+
 				case "CATUI_EntityTags":
 					value = "";
 					if (Target != null)
@@ -106,7 +147,7 @@ public class XUiC_TargetBarPatch
 			}
 		}
 
-		// 其余绑定：委托给 TargetBuffController
+
 		if (TargetBuffController.HasBinding(bindingName))
 		{
 			value = TargetBuffController.GetBindingValue(bindingName);
@@ -114,7 +155,7 @@ public class XUiC_TargetBarPatch
 			return false;
 		}
 
-		// 未识别：交给原版处理
+
 		return true;
 	}
 }

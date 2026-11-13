@@ -15,12 +15,12 @@ public class XUiC_IngredientEntryPatch
 		bool flag = __instance.ingredient != null;
 		switch (bindingName)
 		{
-			// 素材是否有配方
+
 			case "CATUI_InventoryHasRecipe":
 				value = "false";
 				if (flag)
 				{				
-					// FilterRecipesByID 是 xUiC_RecipeList.SetRecipeDataByItem	内的方法
+
 					List<Recipe> ingredientRecipes = XUiM_Recipes.FilterRecipesByID(__instance.ingredient.itemValue.ItemClass.Id, XUiM_Recipes.GetRecipes());
 					if (ingredientRecipes != null && ingredientRecipes.Count > 0)
 					{
@@ -63,7 +63,7 @@ public class XUiC_IngredientEntryPatch
 		};
     }
 
-    // 清理已销毁的实例
+
     [HarmonyPostfix]
     [HarmonyPatch(typeof(XUiController), "OnClose")]
     public static void OnClosePostfix(XUiController __instance)

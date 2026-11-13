@@ -1,42 +1,46 @@
-// 引入所需的命名空间
+
 using System.Reflection;
 using HarmonyLib;
 using UnityEngine;
 
-// ============================================================================
-// 注意：CATUI_local_load 联机配置叠加功能已集成到本程序集（LocalLoadPatch.cs）。
-// 如果旧版本还安装了独立的 ZZZ_CATUI_local_load 模组目录，请务必删除它，
-// 否则会出现"同一逻辑被 Harmony 重复打补丁"的问题（叠加逻辑重复执行）。
-// 该功能的启用/关闭开关见 LocalLoadPatch.cs 顶部的 EnableLocalLoad 字段。
-// ============================================================================
 
-// 定义一个名为ModStartup的公共类，继承自IModApi接口
 public class ModStartup : IModApi
 {
-    // 初始化方法
+
     public void InitMod(Mod modInstance)
     {
-        // 加载 Assembly-CSharp.dll
+
         Assembly executeAssembly = Assembly.GetExecutingAssembly();
 
-        // 读取 ModSettings.xml 配置（在打补丁前应用，LocalLoad 开关从这里获取）
+        CatuiGearsPreviewResources.Restore(executeAssembly);
         CatuiSettings.Load();
         CatuiToolbeltSettings.Apply();
+        CatuiHealthBarSettings.Load();
+        CatuiQuantityProbe.Reload();
 
-        // 创建Harmony实例
+
         Harmony harmony = new Harmony(executeAssembly.GetName().Name);
 
-        // 打补丁
+
         harmony.PatchAll(executeAssembly);
+
+
+
+        CatuiQuantityInputShield.Install(harmony);
+
 
         Debug.Log("<color=#00FF00>CATUI Applied.</color>");
 
-        // 常量补丁(组队队友的颜色)
+
         ModEvents.GameAwake.RegisterHandler((ref ModEvents.SGameAwakeData _data) =>
         {
-            // 刷新 ModSettings.xml 配置（Gears 的存档在启动早期可能尚未生成，这里再读一次）
+
             CatuiSettings.Load();
             CatuiToolbeltSettings.Apply();
+        CatuiHealthBarSettings.Load();
+            CatuiQuantityProbe.Reload();
+            CatuiGearsUiGate.TryConnect();
+            CatuiQuantityMouseWatcher.EnsureRunning();
 
             Constants.TrackedFriendColors = new Color[8]
             {

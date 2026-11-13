@@ -1,21 +1,183 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-    CATUI 配置文件（Gears 模组兼容格式）。
-
-    有 Gears 模组时：游戏内设置界面（Options -> Mods -> CATUI）会显示并控制此处的开关；
-    无 Gears 模组时：直接修改下方 value 值即可生效（On=开启，Off=关闭），重启游戏生效。
-
-    当前支持的开关：
-      CATUI_LocalLoadEnabled  联机配置叠加功能（默认 On）。
-        On  ：进入服务器时保留服务器配置并叠加本地 CATUI 补丁；服务器下发空/缺失时回退本地文件。
-        Off ：完全使用原版加载行为，不做任何叠加/回退。
--->
-<ModSettings>
-	<Global>
-		<Tab name="General" displayKey="CATUI_ModSettingsGeneral" tooltipKey="CATUI_ModSettingsGeneralTooltip">
-			<Category name="General" displayKey="CATUI_ModSettingsCategory" tooltipKey="CATUI_ModSettingsCategoryTooltip">
-				<Switch name="CATUI_LocalLoadEnabled" displayKey="CATUI_LocalLoadEnabled" tooltipKey="CATUI_LocalLoadEnabledTooltip" value="On" defaultValue="On" leftValue="Off" rightValue="On" />
-			</Category>
-		</Tab>
-	</Global>
+<?xml version='1.0' encoding='utf-8'?>
+<ModSettings version="2">
+  <Global>
+    <Tab name="General" displayKey="CATUI_ModSettingsGeneral" tooltipKey="CATUI_ModSettingsGeneralTooltip">
+      <Category name="General" displayKey="CATUI_ModSettingsCategory" tooltipKey="CATUI_ModSettingsCategoryTooltip">
+        <Switch name="CATUI_LocalLoadEnabled" displayKey="CATUI_LocalLoadEnabled" type="bool" defaultValue="false">
+          <Description key="CATUI_LocalLoadEnabledTooltip" />
+          <RestartScope scope="Restart" />
+        </Switch>
+        <Switch name="CATUI_BooksIconMode" displayKey="CATUI_BooksIconMode" type="bool" defaultValue="true">
+          <Description key="CATUI_BooksIconModeDesc" />
+          <RestartScope scope="Restart" />
+          <Preview>
+            <Image value="false" path="@modfolder(CATUI)://Misc/img/BooksOff.png" />
+            <Image value="true" path="@modfolder(CATUI)://Misc/img/BooksOn.png" />
+          </Preview>
+        </Switch>
+        <Switch name="CATUI_QuantityTransfer" displayKey="CATUI_QuantityTransfer" type="bool" defaultValue="false">
+          <Description key="CATUI_QuantityTransferDesc" />
+          <RestartScope scope="Restart" />
+        </Switch>
+      </Category>
+    </Tab>
+    <Tab name="Toolbelt" displayKey="CATUI_ToolbeltTab">
+      <Category name="Toolbelt" displayKey="CATUI_ToolbeltCategory">
+        <Switch name="EnableToolbeltExtension" displayKey="CATUI_ToolbeltEnableExtension" type="bool" defaultValue="false">
+          <Description key="CATUI_ToolbeltEnableExtensionDesc" />
+          <RestartScope scope="Restart" />
+        </Switch>
+        <Slider name="Pages" displayKey="CATUI_ToolbeltPages" type="int" defaultValue="1">
+          <Incremental increment="1" minValue="1" maxValue="10" />
+          <Description key="CATUI_ToolbeltPagesDesc" />
+          <RestartScope scope="Restart" />
+        </Slider>
+        <Slider name="SlotsPerRow" displayKey="CATUI_ToolbeltSlotsPerRow" type="int" defaultValue="10">
+          <Incremental increment="1" minValue="10" maxValue="20" />
+          <Description key="CATUI_ToolbeltSlotsPerRowDesc" />
+          <RestartScope scope="Restart" />
+        </Slider>
+        <Switch name="HidePageArrows" displayKey="CATUI_ToolbeltHidePageArrows" type="bool" defaultValue="false">
+          <Description key="CATUI_ToolbeltHidePageArrowsDesc" />
+          <RestartScope scope="Restart" />
+        </Switch>
+        <Switch name="HidePageNumbers" displayKey="CATUI_ToolbeltHidePageNumbers" type="bool" defaultValue="false">
+          <Description key="CATUI_ToolbeltHidePageNumbersDesc" />
+          <RestartScope scope="Restart" />
+        </Switch>
+      </Category>
+    </Tab>
+    <Tab name="HealthBars" displayKey="CATUI_HealthBarsTab">
+      <Category name="General" displayKey="CATUI_HealthBarsGeneral" />
+      <Category name="Entity" displayKey="CATUI_HealthBarsEntity">
+        <Selector name="CATUI_NormalZombieHPMode" displayKey="CATUI_NormalZombieHPBar" type="string" defaultValue="ON">
+          <List allowedValues="OFF,ON,CUSTOM" />
+          <LocalizationPrefix prefix="CATUI_HealthBarsMode_" />
+          <Description key="CATUI_NormalZombieHPBarDesc" />
+          <RestartScope scope="Restart" />
+          <Preview>
+            <Image value="OFF" path="@modfolder(CATUI)://Misc/img/NormalVarOff.png" />
+            <Image value="ON" path="@modfolder(CATUI)://Misc/img/NormalVar.png" />
+          </Preview>
+        </Selector>
+        <Selector name="CATUI_FeralZombieHPMode" displayKey="CATUI_FeralZombieHPBar" type="string" defaultValue="ON">
+          <List allowedValues="OFF,ON,CUSTOM" />
+          <LocalizationPrefix prefix="CATUI_HealthBarsMode_" />
+          <Description key="CATUI_FeralZombieHPBarDesc" />
+          <RestartScope scope="Restart" />
+          <Preview>
+            <Image value="OFF" path="@modfolder(CATUI)://Misc/img/FeralVarOff.png" />
+            <Image value="ON" path="@modfolder(CATUI)://Misc/img/FeralVar.png" />
+          </Preview>
+        </Selector>
+        <Selector name="CATUI_RadiatedZombieHPMode" displayKey="CATUI_RadiatedZombieHPBar" type="string" defaultValue="ON">
+          <List allowedValues="OFF,ON,CUSTOM" />
+          <LocalizationPrefix prefix="CATUI_HealthBarsMode_" />
+          <Description key="CATUI_RadiatedZombieHPBarDesc" />
+          <RestartScope scope="Restart" />
+          <Preview>
+            <Image value="OFF" path="@modfolder(CATUI)://Misc/img/RadiatedVarOff.png" />
+            <Image value="ON" path="@modfolder(CATUI)://Misc/img/RadiatedVar.png" />
+          </Preview>
+        </Selector>
+        <Selector name="CATUI_InfernalZombieHPMode" displayKey="CATUI_InfernalZombieHPBar" type="string" defaultValue="ON">
+          <List allowedValues="OFF,ON,CUSTOM" />
+          <LocalizationPrefix prefix="CATUI_HealthBarsMode_" />
+          <Description key="CATUI_InfernalZombieHPBarDesc" />
+          <RestartScope scope="Restart" />
+          <Preview>
+            <Image value="OFF" path="@modfolder(CATUI)://Misc/img/InfernalVarOff.png" />
+            <Image value="ON" path="@modfolder(CATUI)://Misc/img/InfernalVar.png" />
+          </Preview>
+        </Selector>
+        <Selector name="CATUI_ChargedZombieHPMode" displayKey="CATUI_ChargedZombieHPBar" type="string" defaultValue="ON">
+          <List allowedValues="OFF,ON,CUSTOM" />
+          <LocalizationPrefix prefix="CATUI_HealthBarsMode_" />
+          <Description key="CATUI_ChargedZombieHPBarDesc" />
+          <RestartScope scope="Restart" />
+          <Preview>
+            <Image value="OFF" path="@modfolder(CATUI)://Misc/img/ChargedVarOff.png" />
+            <Image value="ON" path="@modfolder(CATUI)://Misc/img/ChargedVar.png" />
+          </Preview>
+        </Selector>
+        <Selector name="CATUI_BossZombieHPMode" displayKey="CATUI_BossZombieHPBar" type="string" defaultValue="ON">
+          <List allowedValues="OFF,ON,CUSTOM" />
+          <LocalizationPrefix prefix="CATUI_HealthBarsMode_" />
+          <Description key="CATUI_BossZombieHPBarDesc" />
+          <RestartScope scope="Restart" />
+          <Preview>
+            <Image value="OFF" path="@modfolder(CATUI)://Misc/img/BossVarOff.png" />
+            <Image value="ON" path="@modfolder(CATUI)://Misc/img/BossVar.png" />
+          </Preview>
+        </Selector>
+        <Switch name="CATUI_EntityBuffsDebuffs" displayKey="CATUI_EntityBuffsDebuffs" type="bool" defaultValue="true">
+          <List allowedValues="false,true" />
+          <Description key="CATUI_EntityBuffsDebuffsDesc" />
+          <RestartScope scope="Restart" />
+          <Preview>
+            <Image value="false" path="@modfolder(CATUI)://Misc/img/BuffVarOff.png" />
+            <Image value="true" path="@modfolder(CATUI)://Misc/img/BuffVar.png" />
+          </Preview>
+        </Switch>
+      </Category>
+      <Category name="CustomColors" displayKey="CATUI_HealthBarsCustomColors">
+        <Color name="CATUI_NormalZombieCustomColor" displayKey="CATUI_NormalZombieCustomColor" defaultValue="48,52,59">
+          <Description key="CATUI_ZombieCustomColorDesc" />
+          <RestartScope scope="Restart" />
+        </Color>
+        <Color name="CATUI_FeralZombieCustomColor" displayKey="CATUI_FeralZombieCustomColor" defaultValue="124,90,47">
+          <Description key="CATUI_ZombieCustomColorDesc" />
+          <RestartScope scope="Restart" />
+        </Color>
+        <Color name="CATUI_RadiatedZombieCustomColor" displayKey="CATUI_RadiatedZombieCustomColor" defaultValue="69,113,53">
+          <Description key="CATUI_ZombieCustomColorDesc" />
+          <RestartScope scope="Restart" />
+        </Color>
+        <Color name="CATUI_InfernalZombieCustomColor" displayKey="CATUI_InfernalZombieCustomColor" defaultValue="209,112,39">
+          <Description key="CATUI_ZombieCustomColorDesc" />
+          <RestartScope scope="Restart" />
+        </Color>
+        <Color name="CATUI_ChargedZombieCustomColor" displayKey="CATUI_ChargedZombieCustomColor" defaultValue="60,114,174">
+          <Description key="CATUI_ZombieCustomColorDesc" />
+          <RestartScope scope="Restart" />
+        </Color>
+        <Color name="CATUI_BossZombieCustomColor" displayKey="CATUI_BossZombieCustomColor" defaultValue="112,69,158">
+          <Description key="CATUI_ZombieCustomColorDesc" />
+          <RestartScope scope="Restart" />
+        </Color>
+      </Category>
+    </Tab>
+    <Tab name="DMGNumbers" displayKey="CATUI_DMGNumbersTab">
+      <Category name="Generals" displayKey="CATUI_DMGNumbersGenerals">
+        <Switch name="CATUI_DMGNumberColors" displayKey="CATUI_DMGNumberColors" type="bool" defaultValue="false">
+          <Description key="CATUI_DMGNumberColorsDesc" />
+          <RestartScope scope="Restart" />
+        </Switch>
+        <Switch name="CATUI_DMGOutline" displayKey="CATUI_DMGOutline" type="bool" defaultValue="false">
+          <Description key="CATUI_DMGOutlineDesc" />
+          <RestartScope scope="Restart" />
+        </Switch>
+        <Slider name="CATUI_DMGOutlineThickness" displayKey="CATUI_DMGOutlineThickness" type="int" defaultValue="1">
+          <Incremental increment="1" minValue="1" maxValue="4" />
+          <Description key="CATUI_DMGOutlineThicknessDesc" />
+          <RestartScope scope="Restart" />
+        </Slider>
+        <Slider name="CATUI_DMGTextSize" displayKey="CATUI_DMGTextSize" type="int" defaultValue="100">
+          <Incremental increment="5" minValue="50" maxValue="200" />
+          <Description key="CATUI_DMGTextSizeDesc" />
+          <RestartScope scope="Restart" />
+        </Slider>
+      </Category>
+      <Category name="DMGColors" displayKey="CATUI_DMGColorsCategory">
+        <Color name="CATUI_DMGNumberColor" displayKey="CATUI_DMGNumberColor" defaultValue="255,255,255">
+          <Description key="CATUI_DMGNumberColorDesc" />
+          <RestartScope scope="Restart" />
+        </Color>
+        <Color name="CATUI_DMGOutlineColor" displayKey="CATUI_DMGOutlineColor" defaultValue="0,0,0">
+          <Description key="CATUI_DMGOutlineColorDesc" />
+          <RestartScope scope="Restart" />
+        </Color>
+      </Category>
+    </Tab>
+  </Global>
 </ModSettings>

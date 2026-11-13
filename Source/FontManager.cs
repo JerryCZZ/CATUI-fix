@@ -16,10 +16,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// CATUI 自定义字体管理器。
-/// 类名带 CATUI 前缀，避免与其他 mod（如 Quartz 的 FontManager）发生类型冲突。
-/// </summary>
+
+
+
+
 public static class CATUIFontManager
 {
     private static Dictionary<string, NGUIFont> fonts = new Dictionary<string, NGUIFont>();
@@ -103,9 +103,9 @@ public static class CATUIFontManager
 
     private static bool TryGetStyle(string key, out XUiFromXml.StyleData style)
     {
-        // 兼容两种 style key 形式：`Fonts.UnityFonts` 与 `.Fonts.UnityFonts`。
-        // 某些情况下会出现同名的空 style（无 style_entry），这里优先返回非空的，
-        // 避免空 style 遮蔽真正注册了字体的 style。
+
+
+
         style = null;
         XUiFromXml.StyleData candidate = null;
 
@@ -121,7 +121,7 @@ public static class CATUIFontManager
             return true;
         }
 
-        // 两个都为空时，返回第一个命中的（交给上层判定）
+
         if (XUiFromXml.styles.TryGetValue(key, out candidate))
         {
             style = candidate;
@@ -168,11 +168,11 @@ public static class CATUIFontManager
         return font;
     }
 
-    /// <summary>
-    /// 校验字体是否真正可用（容错：字体资源未加载成功时返回 false，供上层回退到原版字体）。
-    /// - 动态字体：必须有非空 dynamicFont（纹理由 NGUI 按需生成，不在此强校验）；
-    /// - 位图字体：必须有非空 atlas 与材质。
-    /// </summary>
+
+
+
+
+
     public static bool IsFontUsable(NGUIFont font)
     {
         if (font == null)
@@ -183,10 +183,10 @@ public static class CATUIFontManager
         {
             if (font.isDynamic)
             {
-                // 动态字体：资源未加载成功则不可用
+
                 return font.dynamicFont != null;
             }
-            // 位图/引用字体：有 atlas 与材质即视为可用
+
             if (font.atlas != null)
             {
                 Material mat = font.material;
@@ -201,9 +201,9 @@ public static class CATUIFontManager
         }
     }
 
-    // 确保动态字体拥有非空且带有效 shader 的材质。
-    // NGUI 的 UIDrawCall.CreateMaterial() 会访问 mMaterial.shader.name，
-    // 若材质为空 shader 会导致渲染循环每次 UpdateMaterials 抛 NullReferenceException。
+
+
+
     private static void EnsureFontMaterial(NGUIFont font, Font dynamicFont)
     {
         try
@@ -219,7 +219,7 @@ public static class CATUIFontManager
                 return;
             }
 
-            // 兜底：用文本 shader 创建一个新材质挂到字体上，避免空材质/空 shader
+
             Shader textShader = Shader.Find("Unlit/Text");
             if (textShader == null)
             {
@@ -274,10 +274,10 @@ public static class CATUIFontManager
                 font.name = fontName;
                 font.dynamicFont = loadedFont;
 
-                // 确保动态字体有可用的材质，避免 drawCall 拿到空 shader 的材质导致渲染循环 NRE
+
                 EnsureFontMaterial(font, loadedFont);
 
-                // 容错：材质/纹理仍不可用则放弃注册，让 GetUIFontByName 回退到原版字体
+
                 if (IsFontUsable(font))
                 {
                     fonts.Add(fontName, font);

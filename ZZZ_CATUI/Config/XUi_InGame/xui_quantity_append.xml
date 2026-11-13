@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configs>
+  <!-- Group exists for future controller registration; no replacement of vanilla right click yet. -->
+  <append xpath="/xui">
+    <window_group name="CATUIQtyTransfer" actionset="false">
+      <window name="windowCATUIQtyTransfer" />
+    </window_group>
+  </append>
+</configs>

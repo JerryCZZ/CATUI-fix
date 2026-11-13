@@ -4,7 +4,7 @@ using System.Collections.Generic;
 [HarmonyPatch]
 public class XUiTweenDelayPatch
 {
-    // 存储每个Tween的延迟时间（仅在初始化阶段临时持有，应用后立即清理）
+
     private static readonly Dictionary<XUiTweenAbs, float> tweenDelays = new Dictionary<XUiTweenAbs, float>();
 
     [HarmonyPrefix]
@@ -30,7 +30,7 @@ public class XUiTweenDelayPatch
         if (tweenDelays.TryGetValue(__instance, out float delay))
         {
             _tween.delay = delay;
-            // 应用后立即移除，避免静态集合持有引用
+
             tweenDelays.Remove(__instance);
         }
     }

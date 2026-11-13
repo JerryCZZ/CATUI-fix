@@ -80,7 +80,12 @@
 			<style_entry name="sprite" value="catui_icon_shield" />
 			<style_entry name="pivot" value="center" />
 		</style>
-		<style name="CATUI.level.color.0">
+		        <style name="CATUI.entity.background.feral"><style_entry name="color" value="124,90,47,200" /></style>
+        <style name="CATUI.entity.background.radiated"><style_entry name="color" value="69,113,53,200" /></style>
+        <style name="CATUI.entity.background.infernal"><style_entry name="color" value="209,112,39,200" /></style>
+        <style name="CATUI.entity.background.charged"><style_entry name="color" value="60,114,174,200" /></style>
+        <style name="CATUI.entity.background.boss"><style_entry name="color" value="112,69,158,200" /></style>
+<style name="CATUI.level.color.0">
 			<style_entry name="color" value="255,0,0,200" />
 		</style>
 		<style name="CATUI.level.color.1">

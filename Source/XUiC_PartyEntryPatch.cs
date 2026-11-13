@@ -12,7 +12,7 @@ public class XUiC_PartyEntryPatch
 	{
 		switch (bindingName)
 		{
-			// ping
+
 			case "CATUI_Ping":
 				value = "-1";
 				if (__instance.Player != null) {
@@ -34,15 +34,15 @@ public class XUiC_PartyEntryPatch
 					const string PoorColor = "255, 0, 0";
 					if (_ping > 0)
 					{
-						// 网络良好
+
 						if (_ping <= 150) {
 							value = GoodColor;
 						}
-						// 网络一般
+
 						else if (_ping <= 500) {
 							value = MediumColor;
 						}
-						// 网络较差
+
 						else
 						{
 							value = PoorColor;
@@ -52,7 +52,7 @@ public class XUiC_PartyEntryPatch
 				__result = true;
 				return false;
 
-			// 玩家在队伍中的排序索引（MemberList 下标）
+
 			case "CATUI_PartyIndex":
 				value = "0";
 				if (__instance.Player != null && __instance.xui != null && __instance.xui.playerUI != null && __instance.xui.playerUI.entityPlayer != null)
@@ -86,7 +86,7 @@ public class XUiC_PartyEntryPatch
 		UpdateAvatar(__instance, player);
 	}
 
-	// 队友头像：有 Steam 头像时显示头像，否则显示占位（黑色底 + 队伍序号）
+
 	private static void UpdateAvatar(XUiC_PartyEntry entry, EntityPlayer player)
 	{
 		XUiV_Texture avatarTexture = GetChildView<XUiV_Texture>(entry, "avatar");
@@ -94,7 +94,7 @@ public class XUiC_PartyEntryPatch
 		{
 			return;
 		}
-		// 默认显示占位（黑底+序号）
+
 		avatarTexture.Texture = null;
 		avatarTexture.IsVisible = false;
 		SetChildVisible(entry, "avatarFallback", true);
@@ -107,7 +107,7 @@ public class XUiC_PartyEntryPatch
 		}
 		PartyAvatar.RequestAvatar(steamId, delegate(Texture2D texture)
 		{
-			// 头像加载完成时校验该 entry 仍显示同一玩家
+
 			if (texture == null || !ReferenceEquals(entry.Player, player))
 			{
 				return;

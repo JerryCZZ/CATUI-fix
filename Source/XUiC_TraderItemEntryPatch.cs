@@ -10,7 +10,7 @@ public class XUiC_TraderItemEntryPatch
 	{
 		switch (bindingName)
 		{
-			// 商品名称
+
 			case "CATUI_ItemName":
 				value = "";
 				if (__instance.item != null)
@@ -21,7 +21,7 @@ public class XUiC_TraderItemEntryPatch
 				__result = true;
 				return false;
 
-			// 商品库存
+
 			case "CATUI_ItemCount":
 				value = "1";
 				if (__instance.item != null)

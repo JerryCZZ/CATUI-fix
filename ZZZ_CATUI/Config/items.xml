@@ -1,7 +1,20 @@
 <configs>
-  <!-- Remove an existing override to avoid duplicate AltItemTypeIconColor properties. -->
-  <remove xpath="/items/item[property[@name='AltItemTypeIcon' and @value='book_read']]/property[@name='AltItemTypeIconColor']" />
-  <insertafter xpath="/items/item/property[@name='AltItemTypeIcon' and @value='book_read']">
-    <property name="AltItemTypeIconColor" value="0,255,0,255" />
-  </insertafter>
+  <!-- Apply the green tint only when enabled; do not remove a property that may be absent in vanilla. -->
+  <conditional>
+    <if cond="mod_loaded('Gears')">
+      <conditional>
+        <if cond="modsetting('CATUI', 'Global', 'General.General.CATUI_BooksIconMode') == 'True'">
+          <insertafter xpath="/items/item/property[@name='AltItemTypeIcon' and @value='book_read']">
+            <property name="AltItemTypeIconColor" value="0,255,0,255" />
+          </insertafter>
+        </if>
+      </conditional>
+    </if>
+    <else>
+      <!-- No Gears: maintain the pre-existing CATUI green default. -->
+      <insertafter xpath="/items/item/property[@name='AltItemTypeIcon' and @value='book_read']">
+        <property name="AltItemTypeIconColor" value="0,255,0,255" />
+      </insertafter>
+    </else>
+  </conditional>
 </configs>

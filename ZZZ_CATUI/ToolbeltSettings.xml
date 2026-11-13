@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    CATUI toolbar settings. Restart the game after editing. Use the same values on every player and on the host.
-
-    SlotsPerBar : slots in one toolbar row, 10-20 (keys 1-0 select the first 10; the rest by click/scroll)
-    BarsPerPage : toolbar rows shown at once, 1-2 (SHIFT+1..0 uses the second row)
-    PageCount   : number of pages, 1-10 (ALT+1..0 switches page; with 1 page ALT does nothing)
-    Remove this file to keep the game defaults (10 slots, 1 row, 1 page).
--->
-<CATUI_Toolbelt>
-	<SlotsPerBar value="10" />
-	<BarsPerPage value="1" />
-	<PageCount value="3" />
-</CATUI_Toolbelt>
+<ToolbeltSettings>
+  <!-- Used as the fallback when Gears is not installed / has no saved values. -->
+  <Enabled value="Off" />
+  <SlotsPerBar value="10" />
+  <BarsPerPage value="1" />
+  <PageCount value="1" />
+  <HidePageArrows value="Off" />
+  <HidePageNumbers value="Off" />
+</ToolbeltSettings>

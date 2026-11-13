@@ -9,15 +9,15 @@ public class BindingNcalcSafetyPatch
 
 	private static readonly HashSet<string> loggedKeys = new HashSet<string>(StringComparer.Ordinal);
 
-	// BindingItemNcalc.evaluateExpression 在两种情况下都会返回空字符串：
-	//  1) 表达式"合法地"返回空结果，例如 slotLockIcon 使用的
-	//     {# !defined('userlockmode') ? '' : (userlockedslot ? ... : ...) }
-	//     当 userlockmode 未定义时返回 ''，这是设计好的"无图标"含义，必须原样保留；
-	//  2) NCalc 求值失败(抛异常)，例如 {# CATUI_GroupEntryLevelFill * 0.8 }
-	//     在参数取到非法值/空值时报错，空结果流入 fill 等数值属性解析时
-	//     会触发 "Can not parse input ('') into target type System.Single" 刷屏。
-	// 这里通过再次探测 Evaluate() 是否抛异常来区分两种情况：
-	// 仅当求值失败(抛异常)时把空结果替换为 "0" 实现优雅降级；合法空结果保持不变。
+
+
+
+
+
+
+
+
+
 	[HarmonyPatch(typeof(BindingItemNcalc), "evaluateExpression")]
 	[HarmonyPostfix]
 	public static void EvaluateExpressionPostfix(ref string __result, BindingItemNcalc __instance)

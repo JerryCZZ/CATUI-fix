@@ -417,16 +417,18 @@
 			<rect name="targetHealthBarNotboss" pos="-250, -130" width="500" height="27" visible="{isnotboss}" >
 				<sprite depth="1" name="background" width="508" height="35" pos="-4,4" color="0,0,0,175" type="sliced" />
 				<rect depth="2" pos="-1,1" width="502" height="29">
+					<!-- Normal CUSTOM background only -->
+                    <sprite type="sliced" color="{CATUI_EntityBackgroundColor}" visible="{CATUI_ShowNormalBackground}" />
 					<!-- 凶残 -->
-					<sprite type="sliced" style="CATUI.level.color.1" visible="{# CATUI_EntityType == 'feral' }" />
+					<sprite type="sliced" style="CATUI.entity.background.feral" color="{CATUI_EntityBackgroundColor}" visible="{# CATUI_EntityType == 'feral' }" />
 					<!-- 辐射 -->
-					<sprite type="sliced" style="CATUI.level.color.2" visible="{# CATUI_EntityType == 'radiated' }" />
+					<sprite type="sliced" style="CATUI.entity.background.radiated" color="{CATUI_EntityBackgroundColor}" visible="{# CATUI_EntityType == 'radiated' }" />
 					<!-- 带电 -->
-					<sprite type="sliced" style="CATUI.level.color.4" visible="{# CATUI_EntityType == 'charged' }" />
+					<sprite type="sliced" style="CATUI.entity.background.charged" color="{CATUI_EntityBackgroundColor}" visible="{# CATUI_EntityType == 'charged' }" />
 					<!-- 炼狱 -->
-					<sprite type="sliced" style="CATUI.level.color.0" visible="{# CATUI_EntityType == 'infernal' }" />
+					<sprite type="sliced" style="CATUI.entity.background.infernal" color="{CATUI_EntityBackgroundColor}" visible="{# CATUI_EntityType == 'infernal' }" />
 					<!-- BOSS - 猪王，大熊，丧尸熊，恐狼 -->
-					<sprite type="sliced" style="CATUI.level.color.5" visible="{# CATUI_EntityType == 'boss' }" />
+					<sprite type="sliced" style="CATUI.entity.background.boss" color="{CATUI_EntityBackgroundColor}" visible="{# CATUI_EntityType == 'boss' }" />
 				</rect>
 				<sprite depth="3" color="[darkestGrey]" type="sliced" />
 				<filledsprite depth="4"  name="BarContent" type="filled" color="255,255,255,255" fill="{fill}" style="CATUI.sprite.filled.prue" />
@@ -435,7 +437,7 @@
 				<label depth="5" pos="250, 18" name="TextContent" font_size="24" color="[white]" justify="center" pivot="center" text="{name}" style="CATUI.text.shadow.black.1px" />
 				<label depth="5" width="400" name="TextContent" pos="250,-14" font_size="21" color="[white]" justify="center" pivot="center" text="{currentwithmax}" />
 				<!-- buff -->
-				<table pos="-4,-33" cols="20" padding="2,0" width="500" height="50" hide_inactive="true" always_reposition="true">
+				<table visible="{CATUI_EntityBuffsEnabled}" pos="-4,-33" cols="20" padding="2,0" width="500" height="50" hide_inactive="true" always_reposition="true">
 					<!-- 护甲（数值展示在角标/层数位置） -->
 					<CATUI_entity_buff_item width="26" height="26" buff_color="0, 255, 0" buff_icon="catui_icon_shield" buff_corner_text="{CATUI_EntityArmorRating}" buff_timer="" visible="{# int(CATUI_EntityArmorRating) > 0}" />
 
@@ -546,7 +548,7 @@
 	<remove xpath="/windows/window[@name='HUDRightStatBars']/rect/rect[@stat_type='VehicleHealth']" />
 	<remove xpath="/windows/window[@name='HUDRightStatBars']/grid/rect[@stat_type='ActiveItem']" />
 	<append xpath="/windows/window[@name='HUDRightStatBars']">
-		<rect depth="-20" name="HUD_Ammo" pos="-220,110" width="300" height="200" controller="HUDStatBar" stat_type="ActiveItem" visible="{# CATUI_playerActiveItemName != 'meleeHandPlayer' and CATUI_playerActiveItemName != '' and CATUI_playerMounted != true }">		
+		<rect depth="-20" name="HUD_Ammo" pos="-220,110" width="300" height="200" controller="HUDStatBar" stat_type="ActiveItem" visible="{# CATUI_playerActiveItemName != 'meleeHandPlayer' and CATUI_playerActiveItemName != '' }">		
 			<!-- 武器名称 -->
 			<rect depth="1" pos="-108,-26" width="300" height="32">
 				<sprite pos="0,0" width="${parentinnerwidth}" height="${parentinnerheight}" color="[black]" type="sliced" sprite="catui_active_name" />
@@ -749,7 +751,11 @@
 	<append xpath="/windows">
 		<window name="windowToolbelt" width="753" height="78" anchor="CenterBottom" pos="0, 60" controller="ToolbeltWindow" cursor_area="true">
 			<rect pos="3,-3" controller="Toolbelt">
-
+				<rect name="toolbeltPager" pos="{%'375, ' + (beltCount * 82 - 60)}" width="160" height="36" pivot="center" visible="{showpager}">
+					<button depth="3" name="btnToolbeltPrev" visible="{catui_show_page_arrows}" pos="-60, 0" pivot="center" sprite="ui_game_symbol_arrow_left" style="icon32px, press, hover" sound="[paging_click]" tooltip_key="lblToolbeltPrev" />
+					<label depth="3" name="toolbeltPageLabel" visible="{catui_show_page_numbers}" pos="0, 0" width="40" height="30" pivot="center" justify="center" text="{toolbeltpage}" font_size="22" />
+					<button depth="3" name="btnToolbeltNext" visible="{catui_show_page_arrows}" pos="60, 0" pivot="center" sprite="ui_game_symbol_arrow_right" style="icon32px, press, hover" sound="[paging_click]" tooltip_key="lblToolbeltNext" />
+				</rect>
 				<rect name="bars" repeat_content="true" repeat_count="{%beltCount}">
 					<rect name="bar${repeat_i}" pos="0, ${repeat_i * 82}">
 						<button depth="3" name="btnClearInventory${repeat_i}" sprite="ui_game_symbol_trash" tooltip_key="lblClearInventory" pos="800,-32" style="icon32px, press, hover" pivot="center" sound="[paging_click]" visible="{creativewindowopen}" />
@@ -796,7 +802,6 @@
 	<setattribute xpath="/windows/window[@controller='CraftingListInfo']/rect[@name='content']/grid[@name='recipes']" name="cols">4</setattribute>
 	<setattribute xpath="/windows/window[@controller='CraftingListInfo']/rect[@name='content']/grid[@name='recipes']" name="pos">3,-100</setattribute>
 	<setattribute xpath="/windows/window[@controller='CraftingListInfo']/rect[@name='content']/grid[@name='recipes']" name="cell_width">98</setattribute>
-	<setattribute xpath="//window[@name='windowBackpack']/rect[@name='content']/scrollview/grid[@name='inventory']" name="allow_clicklock">true</setattribute>
 	<setattribute xpath="/windows/window[@controller='CraftingListInfo']/rect[@name='content']/grid[@name='recipes']" name="cell_height">112</setattribute>
 	<setattribute xpath="/windows/window[@controller='CraftingListInfo']/rect[@name='content']/grid[@name='recipes']" name="arrangement">horizontal</setattribute>
 
@@ -931,16 +936,16 @@
 	<remove xpath="/windows/window[@name='craftingInfoPanel']/rect[@name='contentCraftingInfo']/rect[@name='ingredients']"/>
 	<append xpath="/windows/window[@name='craftingInfoPanel']/rect[@name='contentCraftingInfo']">
 		<rect depth="1" pos="153,-48" name="CATUI_ingredients" width="${parentinnerwidth - 152}" height="${parentinnerheight - 82}" visible="{showingredients}">
-			<rect pos="6,-6" width="444" height="292" controller="IngredientList">
+			<grid pos="6,-6" rows="2" cols="4" cell_height="146" cell_width="111" controller="IngredientList">
 				<CATUI_ingredient_row name="1" pos="0,0"/>
-				<CATUI_ingredient_row name="2" pos="111,0"/>
-				<CATUI_ingredient_row name="3" pos="222,0"/>
-				<CATUI_ingredient_row name="4" pos="333,0"/>
-				<CATUI_ingredient_row name="5" pos="0,-146"/>
-				<CATUI_ingredient_row name="6" pos="111,-146"/>
-				<CATUI_ingredient_row name="7" pos="222,-146"/>
-				<CATUI_ingredient_row name="8" pos="333,-146"/>
-			</rect>
+				<CATUI_ingredient_row name="2" pos="0,0"/>
+				<CATUI_ingredient_row name="3" pos="0,0"/>
+				<CATUI_ingredient_row name="4" pos="0,0"/>
+				<CATUI_ingredient_row name="5" pos="0,0"/>
+				<CATUI_ingredient_row name="6" pos="0,0"/>
+				<CATUI_ingredient_row name="7" pos="0,0"/>
+				<CATUI_ingredient_row name="8" pos="0,0"/>
+			</grid>
 		</rect>
 	</append>
 

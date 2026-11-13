@@ -21,7 +21,7 @@ public class XUiC_ItemStackPatch
         public string modifications;
     }
 
-    // 绑定结果缓存：itemStack 引用变化即物品变化，引用比较廉价且准确
+
     private static readonly Dictionary<XUiC_ItemStack, BindingCache> _bindingCache = new Dictionary<XUiC_ItemStack, BindingCache>();
 
     [HarmonyPostfix]
@@ -31,14 +31,18 @@ public class XUiC_ItemStackPatch
 		if (_patchedInstances.Contains(__instance))
 			return;
 
-		_patchedInstances.Add(__instance);
-		__instance.OnPress += (XUiController _sender, int _mouseButton) =>
+        _patchedInstances.Add(__instance);
+
+        __instance.OnPress += (XUiController _sender, int _mouseButton) =>
+            CatuiQuantityProbe.OnItemPress(__instance, _sender, _mouseButton);
+        CatuiQuantityProbe.OnItemStackInitialized(__instance);
+        __instance.OnPress += (XUiController _sender, int _mouseButton) =>
 		{
-            // 判断alt键是否按下
+
 			if (!InputUtils.AltKeyPressed)
 				return;
 
-            // 是否允许栏位锁（配置写在xml上，allow_clicklock="${allow_clicklock}"）
+
 			bool allowClicklock = false;
 			if (_sender.CustomAttributes.ContainsKey(ALLOW_CLICKLOCK_ATTR))
 			{
@@ -54,27 +58,27 @@ public class XUiC_ItemStackPatch
 			__instance.UserLockedSlot = !__instance.UserLockedSlot;
 			__instance.RefreshBindings();
 
-			// 背包 更新栏位锁状态
+
 			if (_sender.Parent.ToString() == "XUiC_Backpack") {
 				backpackWindow.UpdateLockedSlots(backpackWindow.standardControls);
 			}
-			// 箱子 容器窗口是否打开 更新栏位锁状态 2.2+
+
 			else if (_sender.Parent.ToString() == "XUiC_LootContainer" && lootWindow.IsOpen)
 			{
 				lootWindow.UpdateLockedSlots(lootWindow.standardControls);
 			}
-			// 载具 容器窗口是否打开 更新栏位锁状态 2.2+
+
 			else if (_sender.Parent.ToString() == "XUiController" && vehicleContainer.IsOpen)
 			{
 				vehicleContainer.UpdateLockedSlots(vehicleContainer.standardControls);
 			}
 
-			// 播放点击音效
+
 			__instance.xui.PlayMenuClickSound();
 		};
     }
 
-    // 清理已销毁的实例
+
     [HarmonyPostfix]
     [HarmonyPatch(typeof(XUiController), "OnClose")]
     public static void OnClosePostfix(XUiController __instance)
@@ -92,7 +96,7 @@ public class XUiC_ItemStackPatch
     {
         switch (_bindingName)
         {
-            // 给道具增加index
+
             case "CATUI_itemStackSlotIndex":
                 _value = "0";
                 if (__instance?.SlotNumber != null)
@@ -102,7 +106,7 @@ public class XUiC_ItemStackPatch
                 __result = true;
                 return false;
 
-            // 缓存热路径绑定，避免每次刷新重复遍历 Stats/Modifications
+
             case "CATUI_itemBoosted":
             case "CATUI_itemLegendary":
             case "CATUI_itemStackModifications":
@@ -143,7 +147,7 @@ public class XUiC_ItemStackPatch
                                 cache.legendary = allBoosted;
                             }
 
-                            // 模组插槽文本
+
                             if (itemValue.Quality > 0 && itemValue.modifications != null && itemValue.modifications.Length > 0)
                             {
                                 __instance.CustomAttributes.TryGetValue("mod_highlight", out var highlightStyle);
@@ -192,7 +196,7 @@ public class XUiC_ItemStackPatch
                 __result = true;
                 return false;
             }
-            // 是否显示耐久度：hasdurability && MaxUseTimes>1 && 非模组 && 非篝火/熔炉
+
             case "CATUI_itemShowDurability":
             {
                 _value = "false";
@@ -260,7 +264,7 @@ public class XUiC_ItemStackPatch
                 return false;
             }
 
-            // 调试用
+
             case "CATUI_itemBoostList":
                 _value = "";
                 if (__instance?.itemStack?.itemValue == null)
@@ -298,7 +302,7 @@ public class XUiC_ItemStackPatch
         }
     }
 
-    // 去掉鼠标hover的icon缩放动画
+
     [HarmonyPostfix]
     [HarmonyPatch(typeof(XUiC_ItemStack), "AllowIconGrow", MethodType.Getter)]
     public static void AllowIconGrowPostfix(ref bool __result)

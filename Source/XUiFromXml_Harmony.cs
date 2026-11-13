@@ -81,7 +81,7 @@ public class XUiFromXmlReversePatch
     [HarmonyPatch("parseParams")]
     public static void parseControlParams(XElement _node, XUiController _parent, Dictionary<string, object> _templateParams)
     {
-        // its a stub so it has no initial content
+
         throw new NotImplementedException(TAG + "parseControlParams");
     }
 
@@ -90,7 +90,7 @@ public class XUiFromXmlReversePatch
     public static void parseAttributes(XElement _node, XUiView _viewComponent,
         Dictionary<string, object> _templateParams = null)
     {
-        // its a stub so it has no initial content
+
         throw new NotImplementedException(TAG + "parseAttributes");
     }
 
@@ -98,7 +98,7 @@ public class XUiFromXmlReversePatch
     [HarmonyPatch("parseController")]
     public static XUiController parseController(XElement _node, XUi _xui, XUiWindowGroup _windowGroup, XUiController _parent)
     {
-        // its a stub so it has no initial content
+
         throw new NotImplementedException(TAG + "parseController");
     }
 
@@ -107,7 +107,7 @@ public class XUiFromXmlReversePatch
     public static XUiView parseViewComponents(XElement _node, XUiWindowGroup _windowGroup, XUiController _parent = null,
         string _nodeNameOverride = "", Dictionary<string, object> _templateParams = null)
     {
-        // its a stub so it has no initial content
+
         throw new NotImplementedException(TAG + "parseViewComponents");
     }
 
@@ -115,7 +115,7 @@ public class XUiFromXmlReversePatch
     [HarmonyPatch("logForNode")]
     public static void logForNode(LogType _level, XElement _node, string _message)
     {
-        // its a stub so it has no initial content
+
         throw new NotImplementedException(TAG + "logForNode");
     }
 }

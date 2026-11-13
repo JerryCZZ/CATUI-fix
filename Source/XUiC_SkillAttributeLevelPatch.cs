@@ -27,7 +27,7 @@ public class XUiC_SkillAttributeLevelPatch
 		}
 		switch (_bindingName)
 		{
-			// 复写 当前等级技能状态
+
 			case "buyvisible":
 				_value = flag.ToString();
                 if (__instance.CurrentSkill != null)
@@ -42,7 +42,7 @@ public class XUiC_SkillAttributeLevelPatch
 				__result = true;
 				return false;
 
-			// 当前等级 是否Buffed
+
 			case "CATUI_IsBuffed":
 				_value = "fasle";
 				if (__instance.CurrentSkill != null && flag4)
@@ -52,7 +52,7 @@ public class XUiC_SkillAttributeLevelPatch
 				__result = true;
 				return false;
 
-			// 当前等级 是否Nerfed
+
 			case "CATUI_IsNerfed":
 				_value = "fasle";
 				if (__instance.CurrentSkill != null && flag3 && flag5)
@@ -62,7 +62,7 @@ public class XUiC_SkillAttributeLevelPatch
 				__result = true;
 				return false;
 
-			// 当前等级 消费技能点
+
 			case "CATUI_BuyCost":
 				_value = "0";
 				if (__instance.CurrentSkill != null)
@@ -73,16 +73,16 @@ public class XUiC_SkillAttributeLevelPatch
 				__result = true;
 				return false;
 
-			// 当前等级技能状态
+
 			case "CATUI_SkillStat":
-				// 未学习
+
 				_value = "notbuy";
-				// 已学习
+
 				if (flag3)
 				{
 					_value = "bought";
 				}
-				// 可学习
+
 				else if (flag2)
 				{
 					_value = "buy";
