@@ -548,7 +548,7 @@
 	<remove xpath="/windows/window[@name='HUDRightStatBars']/rect/rect[@stat_type='VehicleHealth']" />
 	<remove xpath="/windows/window[@name='HUDRightStatBars']/grid/rect[@stat_type='ActiveItem']" />
 	<append xpath="/windows/window[@name='HUDRightStatBars']">
-		<rect depth="-20" name="HUD_Ammo" pos="-220,110" width="300" height="200" controller="HUDStatBar" stat_type="ActiveItem" visible="{# CATUI_playerActiveItemName != 'meleeHandPlayer' and CATUI_playerActiveItemName != '' }">		
+		<rect depth="-20" name="HUD_Ammo" pos="-220,110" width="300" height="200" controller="HUDStatBar" stat_type="ActiveItem" visible="{# CATUI_playerActiveItemName != 'meleeHandPlayer' and CATUI_playerActiveItemName != '' and CATUI_playerMounted == 'false' }">		
 			<!-- 武器名称 -->
 			<rect depth="1" pos="-108,-26" width="300" height="32">
 				<sprite pos="0,0" width="${parentinnerwidth}" height="${parentinnerheight}" color="[black]" type="sliced" sprite="catui_active_name" />
